@@ -10,8 +10,10 @@
 </head>
 
 <body>
+    <div id="myStats"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js" integrity="sha512-ZGgXd6TB5qjtvTU6Q5o/LJM4pwLNy8U8XXJh+vJZDXp2wC8ASrl4WOeivaq2fpYc3TnTCLzyDvVjY8YhvNYaXg==" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/three@0.85.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
 
 
     <script>
@@ -23,6 +25,7 @@
         var cube;
         var cylinder;
         var controlsOrbit;
+        var stats;
 
 
         function createCamera() {
@@ -41,6 +44,18 @@
             document.body.appendChild(renderer.domElement);
             controlsOrbit = new THREE.OrbitControls(camera, renderer.domElement);
         }
+
+        //panel de estadisticas
+        function createStats() {
+            stats = new Stats();
+            stats.setMode(2); // 0: fps, 1: ms, 2memory 
+            stats.domElement.style.position = "absolute";
+            stats.domElement.style.left = "100px";
+            stats.domElement.style.top = "10px";
+            document.getElementById("myStats").appendChild(stats.domElement);
+            return stats;
+        }
+
 
         //Cabeza
         function createHead() {
@@ -136,22 +151,6 @@
             cube.position.set(0.5, -1.5, 2);
             scene.add(cube);
         }
-        //antenas
-        function createAnt1() {
-
-            let geometry = new THREE.CubeGeometry(0.4, 2, 0.7);
-            let material = new THREE.MeshLambertMaterial({
-                color: 0x00FF00
-            });
-
-            cube = new THREE.Mesh(geometry, material);
-            cube.position.set(5.4, 0.2, 2);
-            scene.add(cube);
-
-
-        }
-
-
 
         //iluminacion
         function createLightPoint() {
@@ -205,18 +204,23 @@
             createHead();
             createHead2();
             //create antena
-            createAnt1();
+            //createAnt1();
             //create cara
             createFace1();
             createFace2();
             //create rederer
             createRenderer();
+            //stats
+            createStats();
         }
 
         function animate(time) {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
+            //crear orbits
             controlsOrbit.update();
+            //crear estats
+            stats.update();
         }
         init();
         requestAnimationFrame(animate);
